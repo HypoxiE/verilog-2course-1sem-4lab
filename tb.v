@@ -3,45 +3,32 @@
 
 module tb;
 	
-	//// Задание 1
-	reg inp; // Регистор входа
-	wire t_1; // Последовательные соединения инверторов
-	wire clock; // тактовый вход
-	wire Q, Q_inv; // выходы
+	reg  [7:0] I;
+    wire [2:0] Y;
+	wire [7:0] OD;
 
-	not_ u_not_1 (.a(inp), .b(t_1));
-	nand_ u_nand (.a(t_1), .b(inp), .c(clock));
-	t_trigger u_t (.Clock(clock), .Q(Q), .Q_inv(Q_inv));
+	coder cod_uut (
+		.I(I),
+		.Y(Y)
+	);
+
+	decoder dec_uut (
+		.Y(Y),
+		.I(OD)
+	);
+
+	integer i;
 
 	initial begin
-		inp = 0;
-		forever #500000 inp = ~inp; // цикл: каждые 500 ms inp меняется
+		$display("Time\tI\t\tY\tOD");
+		$monitor("%0t\t%b\t%b\t%b", $time, I, Y, OD);
+
+		for (i = 0; i < 8; i = i + 1) begin
+			I = 0;
+			I[i] = 1'b1; #10;
+		end
+		
+		$finish;
 	end
-
-	initial begin
-		$dumpfile("out.vcd");
-		$dumpvars(0, tb);
-
-		#10000000 $finish; // ожидаем 1s и завершаем программу
-	end
-
-	// Задание 2
-	//reg inp;
-	//wire C;
-	//wire Q;
-
-	//not_ u_not (.a(inp), .b(C));
-	//d_trigger u_t (.Clock(C), .D(inp), .Q(Q));
-
-	//initial begin
-	//	inp = 0;
-	//	forever #500000 inp = ~inp; // генерируем тактовые импульcы 1000Hz/50%
-	//end
-
-	//initial begin
-	//	$dumpfile("out.vcd");
-	//	$dumpvars(0, tb);
-	//	#10000000 $finish;
-	//end
 	
 endmodule
