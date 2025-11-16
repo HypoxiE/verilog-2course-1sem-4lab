@@ -26,7 +26,7 @@ module decoder (
 	
 endmodule
 
-module multiplexor (
+module demultiplex (
 	input wire  [2:0] Y,
 	input wire InpSignal,
 	output wire [7:0] Out
@@ -45,5 +45,13 @@ module multiplexor (
 			assign Out[i] = DecoderOut[i] & InpSignal;
 		end
 	endgenerate
-	
+endmodule
+
+module multiplex (
+	input  wire [7:0] In,
+	input  wire [2:0] Sel,
+	output wire Out
+);
+
+	assign Out = In[Sel];
 endmodule
