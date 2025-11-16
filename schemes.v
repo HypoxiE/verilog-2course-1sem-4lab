@@ -55,3 +55,27 @@ module multiplex (
 
 	assign Out = In[Sel];
 endmodule
+
+module func (
+	input  wire A,
+	input  wire B,
+	input  wire C,
+	output wire Out
+);
+
+	wire [7:0] In;
+	wire [2:0] Sel;
+
+	assign In = 8'b11111000;
+
+	assign Sel[0] = A;
+	assign Sel[1] = B;
+	assign Sel[2] = C;
+
+	multiplex f_multiplex (
+		.In (In),
+		.Sel(Sel),
+		.Out(Out)
+	);
+
+endmodule

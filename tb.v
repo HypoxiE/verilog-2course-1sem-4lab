@@ -10,6 +10,9 @@ module tb;
 	//decoder dec_uut (.Y(Y), .I(OD));
 	//integer i;
 	//initial begin
+	//	$dumpfile("out.vcd");
+	//	$dumpvars(0, tb);
+
 	//	$display("Time\tI\t\tY\tOD");
 	//	$monitor("%0t\t%b\t%b\t%b", $time, I, Y, OD);
 
@@ -21,29 +24,60 @@ module tb;
 	//	$finish;
 	//end
 	
-	reg  [7:0] In;
-	reg  [2:0] Sel;
+	//reg  [7:0] In;
+	//reg  [2:0] Sel;
+	//wire Out;
+	//multiplex uut (
+	//	.In(In),
+	//	.Sel(Sel),
+	//	.Out(Out)
+	//);
+	//integer i;
+	//reg expected;
+
+	//initial begin
+	//	$dumpfile("out.vcd");
+	//	$dumpvars(0, tb);
+		
+	//	In = 8'b1010_1101; // пример значений на входах
+
+	//	$display("Inp\t\tSel\tOut\tExpected");
+
+	//	// Перебор всех вариантов выбора
+	//	for (i = 0; i < 8; i = i + 1) begin
+	//		Sel = i;
+	//		#1;                  // небольшая задержка для распространения сигнала
+	//		expected = In[Sel];  // вычисляем ожидаемый результат
+	//		$display("%b\t%b\t%b\t%b", In, Sel, Out, expected);
+	//		#9;                  // оставляем общее время 10 нс на шаг
+	//	end
+
+	//	$finish;
+	//end
+
+	reg  A, B, C;
 	wire Out;
-	multiplex uut (
-		.In(In),
-		.Sel(Sel),
+	integer i;
+	func uut (
+		.A(A),
+		.B(B),
+		.C(C),
 		.Out(Out)
 	);
-	integer i;
-	reg expected;
 
 	initial begin
-		In = 8'b1010_1101; // пример значений на входах
+		$dumpfile("out.vcd");
+		$dumpvars(0, tb);
 
-		$display("Sel | Out | Expected");
+		$display("A\tB\tC\tOut");
 
-		// Перебор всех вариантов выбора
 		for (i = 0; i < 8; i = i + 1) begin
-			Sel = i;
-			#1;                  // небольшая задержка для распространения сигнала
-			expected = In[Sel];  // вычисляем ожидаемый результат
-			$display("%b  |  %b  | %b", Sel, Out, expected);
-			#9;                  // оставляем общее время 10 нс на шаг
+			A = i[0];
+			B = i[1];
+			C = i[2];
+			#1;
+			$display("%b\t%b\t%b\t%b", A, B, C, Out);
+			#9;
 		end
 
 		$finish;
